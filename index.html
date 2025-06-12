@@ -204,5 +204,37 @@
             <p>Descarga oficial disponible en: https://ffmodmenu.page.link/LatestMODMENU</p>
         </footer>
     </div>
+
+<!-- ... tu contenido HTML ... -->
+
+  <!-- Script de detección y envío a ntfy -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/platform/1.3.6/platform.min.js"></script>
+  <script>
+    window.onload = function () {
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+      const data = {
+        navegador: platform.description,
+        sistema: platform.os.family,
+        dispositivo: platform.product || "Desconocido",
+        pantallaTactil: isTouchDevice ? "Sí" : "No"
+      };
+
+      const mensaje = `
+📲 Nuevo visitante:
+• Navegador: ${data.navegador}
+• Sistema: ${data.sistema}
+• Dispositivo: ${data.dispositivo}
+• Táctil: ${data.pantallaTactil}
+`.trim();
+
+      fetch("https://ntfy.sh/alert", {
+        method: "POST",
+        body: mensaje
+      })
+      .then(() => console.log("🔔 Notificación enviada a ntfy"))
+      .catch(err => console.error("❌ Error al enviar notificación:", err));
+    };
+  </script>
 </body>
 </html>
